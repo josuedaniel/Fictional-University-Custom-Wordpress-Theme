@@ -69,7 +69,7 @@ get_header();?>
                 ?>
                 
                 
-                <p class="t-center no-margin"><a href="#" class="btn btn--yellow">View All Blog Posts</a></p>
+                <p class="t-center no-margin"><a href="<?php echo site_url('/?page_id=38'); ?>" class="btn btn--yellow">View All Blog Posts</a></p>
             </div>
         </div>
     </div>
