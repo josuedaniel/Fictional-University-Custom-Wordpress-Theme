@@ -24,6 +24,8 @@ function university_post_types() {
     register_post_type('event', array(
         //makes the post visible to users
         'public' => true,
+       // Makes the editing custom post type ui use the new block editor
+       'show_in_rest' => true, 
         //controls the labels and ui of the wordpress admin
         'labels' => array(
             //makes the proper name show up in the wordpress admin
