@@ -18,5 +18,29 @@ function university_features() {
 }
 add_action('after_setup_theme', 'university_features');
 
-
+// function sontrolling the new post type events
+function university_post_types() {
+    // function that registers a new post type
+    register_post_type('event', array(
+        //makes the post visible to users
+        'public' => true,
+        //controls the labels and ui of the wordpress admin
+        'labels' => array(
+            //makes the proper name show up in the wordpress admin
+            'name' => 'Events',
+            //Makes the adding new event page in the wordpress admin show add new event instead of add new post
+            'add_new_item' => 'Add New Event',
+            // Changes the wording from post to event when editing events
+            'edit_item' => 'Edit Event',
+            //Changes the wording in the wordpress admin from all posts to all events
+            'all_items' => 'All Events',
+            // 
+            'singular_name' => 'Event'
+        ),
+        // gives you a choice of dashicons to show up in the wordpress admin
+        'menu_icon' => 'dashicons-calendar'
+    ));
+}
+// use add_action hook to initialize the new post type Events
+add_action('init', 'university_post_types');
 ?>
