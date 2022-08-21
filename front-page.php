@@ -20,27 +20,35 @@ get_header();?>
             <div class="full-width-split__inner">
                 <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
 
-                <div class="event-summary">
-                    <a href="#" class="event-summary__date t-center">
-                        <span class="event-summary__month">Mar</span>
-                        <span class="event-summary__day">25</span>
-                    </a>
-                    <div class="event-summary__content">
-                        <h5 class="event-summary__title headline headline--tiny"><a href="#">Poetry in the 100</a></h5>
-                        <p>Bring poems you&rsquo;ve wrote to the 100 building this Tuesday for an open mic and snacks. <a href="#" class="nu gray">Learn more</a></p>
-                    </div>
-                </div>
-                <div class="event-summary">
-                    <a href="#" class="event-summary__date t-center">
-                        <span class="event-summary__month">Apr</span>
-                        <span class="event-summary__day">02</span>
-                    </a>
-                    <div class="event-summary__content">
-                        <h5 class="event-summary__title headline headline--tiny"><a href="#">Quad Picnic Party</a></h5>
-                        <p>Live music, a taco truck, and more can be found in our third annual quad picnic day. <a href="#" class="nu gray">Learn more</a></p>
-                    </div>
-                </div>
-                <p class="t-center no-margin"><a href="#" class="btn btn--blue">View All Events</a></p>
+                <!-- use custom queries and the WP_Query class inside a variable to grab the Event post type --> 
+                <?php
+                    $homepageEvents = new WP_Query(array(
+                        // Make the custom query show only 2 events per page
+                        'posts_per_page' => 2,
+                        // Grab the event post type and not post or page post type
+                        'post_type' => 'event'
+                    ));
+                    
+                    // show the post output from the variable $homepageEvents 
+                    while ($homepageEvents->have_posts()) {
+                        $homepageEvents->the_post(); ?>
+                        
+                        <div class="event-summary">
+                            <a href="<?php the_permalink(); ?>" class="event-summary__date t-center">
+                                <span class="event-summary__month"><?php the_time('M'); ?></span>
+                                <span class="event-summary__day"><?php the_time('d'); ?></span>
+                            </a>
+                            <div class="event-summary__content">
+                                <h5 class="event-summary__title headline headline--tiny"><a href="<?php 
+                                the_permalink(); ?>"><?php the_title(); ?></a></h5>
+                                <p><?php echo wp_trim_words(get_the_content(), 18); ?><a href="<?php the_permalink(); ?>" class="nu gray">
+                                Learn more</a></p>
+                            </div>
+                        </div>
+                    <?php }
+                ?>
+                
+                <p class="t-center no-margin"><a href="<?php echo get_post_type_archive_link('event'); ?>" class="btn btn--blue">View All Events</a></p>
             </div>
         </div>
         <div class="full-width-split__two">

@@ -18,10 +18,16 @@ function university_features() {
 }
 add_action('after_setup_theme', 'university_features');
 
-// function sontrolling the new post type events
+// function controlling the new post type events
 function university_post_types() {
     // function that registers a new post type
     register_post_type('event', array(
+        /*
+        //rewrite the slug from event to events
+        'rewrite' => array('slug' => 'events'),
+        */
+        // wordpress will enable an archive page for events
+        'has_archive' => true,
         //makes the post visible to users
         'public' => true,
        // Makes the editing custom post type ui use the new block editor
@@ -45,4 +51,5 @@ function university_post_types() {
 }
 // use add_action hook to initialize the new post type Events
 add_action('init', 'university_post_types');
+
 ?>
