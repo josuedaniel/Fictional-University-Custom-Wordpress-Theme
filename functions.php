@@ -26,8 +26,8 @@ function university_post_types() {
         //rewrite the slug from event to events
         'rewrite' => array('slug' => 'events'),
         */
-        // adds support to edit the excerpt
-        'supports' => array('title', 'editor', 'excerpt'),
+        // adds support to edit the excerpt and custom fields. Title and editor are default but still must be included
+    'supports' => array('title', 'editor', 'excerpt'/*, 'custom-fields'*/),
         // wordpress will enable an archive page for events
         'has_archive' => true,
         //makes the post visible to users
