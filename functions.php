@@ -26,6 +26,8 @@ function university_post_types() {
         //rewrite the slug from event to events
         'rewrite' => array('slug' => 'events'),
         */
+        // adds support to edit the excerpt
+        'supports' => array('title', 'editor', 'excerpt'),
         // wordpress will enable an archive page for events
         'has_archive' => true,
         //makes the post visible to users
