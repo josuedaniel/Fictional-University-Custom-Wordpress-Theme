@@ -32,7 +32,7 @@ function university_post_types() {
         'has_archive' => true,
         //makes the post visible to users
         'public' => true,
-       // Makes the editing custom post type ui use the new block editor
+        // Makes the editing custom post type ui use the new block editor
        'show_in_rest' => true, 
         //controls the labels and ui of the wordpress admin
         'labels' => array(
@@ -53,5 +53,35 @@ function university_post_types() {
 }
 // use add_action hook to initialize the new post type Events
 add_action('init', 'university_post_types');
+
+//Function to adjust the way queries are performed
+function university_adjust_queries($query) {
+    // Make sure the function does not affect the admin page, it only works on the post type Event, and it is the main query for the page
+    if(! is_admin() AND is_post_type_archive('event') and $query->is_main_query()){
+        // set variable names today to the current date
+        $today = date('Ymd');
+        // Set the query to event_date
+        $query->set('meta_key', 'event_date');
+        // determines the order in which posts show
+        $query->set('orderby', 'meta_value_num');
+        // determines the order
+        $query->set('order', 'ASC');
+        // makes sure that only upcoming dates show up by comparing the event_date to the current date
+        $query->set('meta_query', array(
+            array(
+                //Meta key
+                'key' => 'event_date',
+                // Compres the value of the meta key
+                'compare' => '>=',
+                // Compares meta key value to the value of the variable $today
+                'value' => $today,
+                // sets the type of camparison to numeric
+                'type' => 'numeric'
+            )
+            ));
+    }
+}
+// Changes the behavior of wordpess when fetching posts
+add_action('pre_get_posts', 'university_adjust_queries');
 
 ?>

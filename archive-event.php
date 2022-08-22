@@ -17,8 +17,16 @@ get_header(); ?>
     the_post(); ?>
     <div class="event-summary">
         <a href="<?php the_permalink(); ?>" class="event-summary__date t-center">
-            <span class="event-summary__month"><?php the_time('M'); ?></span>
-            <span class="event-summary__day"><?php the_time('d'); ?></span>
+            <span class="event-summary__month"><?php 
+                //show the custom chosen event_date through acf's get_field and format it to up as M
+                $eventDate = new DateTime(get_field('event_date'));
+                echo $eventDate->format('M')
+                
+            ?></span>
+            <span class="event-summary__day"><?php 
+                //show the custom chosen event_date through acf's get_field and format it to up as d                                    
+                echo $eventDate->format('d')
+            ?></span>
         </a>
         <div class="event-summary__content">
             <h5 class="event-summary__title headline headline--tiny"><a href="<?php 
