@@ -50,13 +50,51 @@ function university_post_types() {
         // gives you a choice of dashicons to show up in the wordpress admin
         'menu_icon' => 'dashicons-calendar'
     ));
+
+    register_post_type('program', array(
+        /*
+        //rewrite the slug from program to programs
+        'rewrite' => array('slug' => 'programs'),
+        */
+        // adds support to edit the excerpt and custom fields. Title and editor are default but still must be included
+        'supports' => array('title', 'editor', 'excerpt'/*, 'custom-fields'*/),
+        // wordpress will enable an archive page for programs
+        'has_archive' => true,
+        //makes the post visible to users
+        'public' => true,
+        // Makes the editing custom post type ui use the new block editor
+       'show_in_rest' => true, 
+        //controls the labels and ui of the wordpress admin
+        'labels' => array(
+            //makes the proper name show up in the wordpress admin
+            'name' => 'Programs',
+            //Makes the adding new program page in the wordpress admin show add new program instead of add new post
+            'add_new_item' => 'Add New Program',
+            // Changes the wording from post to program when editing programs
+            'edit_item' => 'Edit Program',
+            //Changes the wording in the wordpress admin from all posts to all programs
+            'all_items' => 'All Programs',
+            // 
+            'singular_name' => 'Program'
+        ),
+        // gives you a choice of dashicons to show up in the wordpress admin
+        'menu_icon' => 'dashicons-awards'
+    ));
 }
 // use add_action hook to initialize the new post type Events
 add_action('init', 'university_post_types');
 
 //Function to adjust the way queries are performed
 function university_adjust_queries($query) {
-    // Make sure the function does not affect the admin page, it only works on the post type Event, and it is the main query for the page
+    // Make sure the function does not affect the admin page, it only works on the post type Program, and it is the main query for the page
+    if (!is_admin() AND is_post_type_archive('program') AND is_main_query()) {
+        //Setting the query order, set to title
+        $query->set('orderby', 'title');
+        $query->set('order', 'ASC');
+        // Setting the number of posts per page, setting it to -1 will show all posts
+        $query->set('posts_per_page', -1);
+    }
+    
     if(! is_admin() AND is_post_type_archive('event') and $query->is_main_query()){
         // set variable names today to the current date
         $today = date('Ymd');
@@ -83,5 +121,8 @@ function university_adjust_queries($query) {
 }
 // Changes the behavior of wordpess when fetching posts
 add_action('pre_get_posts', 'university_adjust_queries');
+
+
+
 
 ?>
