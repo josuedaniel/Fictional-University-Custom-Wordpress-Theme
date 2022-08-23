@@ -113,7 +113,7 @@ function university_adjust_queries($query) {
                 'compare' => '>=',
                 // Compares meta key value to the value of the variable $today
                 'value' => $today,
-                // sets the type of camparison to numeric
+                // sets the type of comparison to numeric
                 'type' => 'numeric'
             )
             ));
