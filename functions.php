@@ -80,6 +80,30 @@ function university_post_types() {
         // gives you a choice of dashicons to show up in the wordpress admin
         'menu_icon' => 'dashicons-awards'
     ));
+
+    register_post_type('professor', array(
+        // adds support to edit the excerpt and custom fields. Title and editor are default but still must be included
+        'supports' => array('title', 'editor'),
+        //makes the post visible to users
+        'public' => true,
+        // Makes the editing custom post type ui use the new block editor
+       'show_in_rest' => true, 
+        //controls the labels and ui of the wordpress admin
+        'labels' => array(
+            //makes the proper name show up in the wordpress admin
+            'name' => 'Professors',
+            //Makes the adding new professor page in the wordpress admin show add new professor instead of add new post
+            'add_new_item' => 'Add New Professor',
+            // Changes the wording from post to professor when editing professors
+            'edit_item' => 'Edit Professor',
+            //Changes the wording in the wordpress admin from all posts to all professors
+            'all_items' => 'All Professors',
+            // 
+            'singular_name' => 'Professor'
+        ),
+        // gives you a choice of dashicons to show up in the wordpress admin
+        'menu_icon' => 'dashicons-welcome-learn-more'
+    ));
 }
 // use add_action hook to initialize the new post type Events
 add_action('init', 'university_post_types');
