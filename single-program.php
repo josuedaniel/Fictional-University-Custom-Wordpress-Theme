@@ -53,13 +53,22 @@ get_header();
                 echo '<hr class="section-break">';
                 //
                 echo '<h2 class="headline headline--medium">'. get_the_title().' Professors</h2>';
+                
+                // Start the unordered list showing off professor cards
+                echo '<ul class="professor-cards">';
                 // show the post output from the variable $relatedProfessors 
                 while ($relatedProfessors->have_posts()) {
                     $relatedProfessors->the_post(); ?>
-                    
-                    <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                    
+                        <!-- Give each list item a class -->
+                        <li class="professor-card__list-item">
+                            <a href="<?php the_permalink(); ?>" class="professor-card">
+                                <img src="<?php the_post_thumbnail_url('professorLandscape') ?>" alt="" class="professor-card__image">
+                                <span class="professor-card__name"><?php the_title(); ?></span>
+                            </a>
+                        </li>
+                                        
                 <?php }
+                echo '</ul>';
             }
 
             wp_reset_postdata();  

@@ -17,7 +17,14 @@ get_header();
             
             
              <div class="generic-content">
-                <?php the_content(); ?>
+                <div class="row group">
+                    <div class="one-third">
+                        <?php the_post_thumbnail('professorPortrait'); ?>
+                    </div>
+                    <div class="two-thirds">
+                        <?php the_content(); ?>
+                    </div>
+                </div>
              </div>
              <?php
                 // get the acf custom field related_programs
