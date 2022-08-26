@@ -13,7 +13,9 @@ function pageBanner($args = NULL) {
     }
     //if there is no photo set in $args
     if (!isset($args['photo'])) {
-        if (get_field('page_banner_background_image')) {
+        // check if we have a page_banner_background_image chosen through acf, we are not 
+        //on an archive page, and we are not on the home page
+        if (get_field('page_banner_background_image') AND !is_archive() AND !is_home() ) {
             $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
         } else {
             $args['photo'] = get_theme_file_uri('/images/ocean.jpg');
