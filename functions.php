@@ -1,4 +1,53 @@
 <?php
+// create the function pageBanner and give it the $args array parameter 
+function pageBanner($args = NULL) {
+    // if there is no title set for $args
+    if (!isset($args['title'])) {
+        // set the title for $args
+        $args['title'] = get_the_title(); 
+    }
+    // if there is no subtitle for $args
+    if (!isset($args['subtitle'])) {
+        // set the subtitle for args from the acf page_banner_subtitle
+        $args['subtitle'] = get_field('page_banner_subtitle');
+    }
+    //if there is no photo set in $args
+    if (!isset($args['photo'])) {
+        if (get_field('page_banner_background_image')) {
+            $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
+        } else {
+            $args['photo'] = get_theme_file_uri('/images/ocean.jpg');
+        }
+        // set the photo for array
+
+    }
+    ?>
+    <div class="page-banner">
+            <div class="page-banner__bg-image" style="background-image: url(<?php 
+                // use the custom field created in acf to bring in the image using the acf method get_field
+                /*
+                $pageBannerImage = 
+                get_field('page_banner_background_image'); echo $pageBannerImage['sizes']['pageBanner'];*/
+                
+                //We will use the $args array to grab the photo value
+                echo $args['photo'];
+                ?>);"></div>
+            <div class="page-banner__content container container--narrow">
+            <!-- You can use the following print_r to see the data behind something. in this case we use it to see that
+            $pageBannerImage is returned as an array and thats why we can use echo $pageBannerImage['url'] -->
+            <?php //print_r($pageBannerImage); ?>    
+            <h1 class="page-banner__title"><?php echo $args['title'] ?> </h1>
+                <div class="page-banner__intro">
+                    <!-- pull in the meta field from one of the custom fields created in acf 
+                    <p><?php //the_field('page_banner_subtitle') ?></p>-->
+                    <!-- instead of doing the above code we will echo the subtitle from the $args variable -->
+                    <p><?php echo $args['subtitle']; ?></p>
+                </div>
+            </div>
+        </div>
+    <?php
+}
+
 function university_files() {
     wp_enqueue_script('main-university-javascript', get_theme_file_uri('/build/index.js'), array('jquery'), '1.0', true);
     wp_enqueue_style('custom-google-fonts', 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');

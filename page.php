@@ -1,17 +1,20 @@
 <?php
 get_header(); 
     while (have_posts()) {
-        the_post(); ?>
+        the_post(); 
+        // Call the pageBanner function
+        pageBanner(); 
+        //create an associative array giving the pagebanner function parameters
+        /* We could call pageBanner with an array to give it parameters. 
+        pageBanner(array(
+            'title' => 'Hello there this is the title',
+            'subtitle' => 'hey hey',
+            /* We could
+            'photo' => 'https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg'
+        )); */
+        ?>
 
-        <div class="page-banner">
-            <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg'); ?>"></div>
-            <div class="page-banner__content container container--narrow">
-                <h1 class="page-banner__title"><?php the_title(); ?> </h1>
-                <div class="page-banner__intro">
-                    <p>DON'T FORGET TO REPLACE ME LATER</p>
-                </div>
-            </div>
-        </div>
+        
 
             <div class="container container--narrow page-section">
                 <?php
