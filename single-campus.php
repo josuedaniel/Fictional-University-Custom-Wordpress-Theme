@@ -79,55 +79,7 @@ get_header();
 
             wp_reset_postdata();  
 
-                    // set variable names today to the current date
-                    $today = date('Ymd');
                     
-                    // Create a custom query to show upcoming events and assign it to the variable $homepageEvents
-                    $homepageEvents = new WP_Query(array(
-                        // Make the custom query show only 2 events per page
-                        'posts_per_page' => 2,
-                        // Grab the event post type and not post or page post type
-                        'post_type' => 'event',
-                        // tell wordpress the name of the custom field we want to use in the orderby key
-                        'meta_key' => 'event_date',
-                        // determines the order in which posts show 
-                        'orderby' => 'meta_value_num',
-                        // determines the order 
-                        'order' => 'ASC',
-                        //query the meta data of the custom post type Event
-                        'meta_query' => array(
-                            array(
-                                //Meta key
-                                'key' => 'event_date',
-                                // Compres the value of the meta key
-                                'compare' => '>=',
-                                // Compares meta key value to the value of the variable $today
-                                'value' => $today,
-                                // sets the type of camparison to numeric
-                                'type' => 'numeric'
-                            ), 
-                            // filters the query so that it returns the meta value related_programs
-                            array(
-                                // grabs the meta value we want
-                                'key' =>'related_programs',
-                                // Makes sure the value is the same as the next requirement
-                                'compare' => 'LIKE',
-                                // the value we are comparing the meta key with
-                                'value' => '"' . get_the_ID() . '"'
-                            )
-                        )
-                    ));
-                    
-                    if ($homepageEvents->have_posts()) {
-                        echo '<hr class="section-break">';
-                        //
-                        echo '<h2 class="headline headline--medium">Upcoming '. get_the_title().' Events</h2>';
-                        // show the post output from the variable $homepageEvents 
-                        while ($homepageEvents->have_posts()) {
-                            $homepageEvents->the_post(); 
-                            get_template_part('template-parts/content-event');    
-                        }
-                    }
                 ?>
         </div>
     <?php }

@@ -196,6 +196,13 @@ add_action('init', 'university_post_types');
 
 //Function to adjust the way queries are performed
 function university_adjust_queries($query) {
+    
+    // Make sure the function does not affect the admin page, it only works on the post type Program, and it is the main query for the page
+    if (!is_admin() AND is_post_type_archive('campus') AND is_main_query()) {
+        // Setting the number of posts per page, setting it to -1 will show all posts
+        $query->set('posts_per_page', -1);
+    }
+    
     // Make sure the function does not affect the admin page, it only works on the post type Program, and it is the main query for the page
     if (!is_admin() AND is_post_type_archive('program') AND is_main_query()) {
         //Setting the query order, set to title
