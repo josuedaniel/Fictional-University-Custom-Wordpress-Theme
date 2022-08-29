@@ -50,13 +50,7 @@ function pageBanner($args = NULL) {
     <?php
 }
 
-function university_files() {
-    wp_enqueue_script('main-university-javascript', get_theme_file_uri('/build/index.js'), array('jquery'), '1.0', true);
-    wp_enqueue_style('custom-google-fonts', 'https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-    wp_enqueue_style('font-awesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.2/css/fontawesome.min.css' );
-    wp_enqueue_style('university_main_styles', get_theme_file_uri('/build/style-index.css'));
-    wp_enqueue_style('university_extra_styles', get_theme_file_uri('/build/index.css')); 
-}   
+
 
 
 add_action('wp_enqueue_scripts', 'university_files');
@@ -73,8 +67,45 @@ function university_features() {
 }
 add_action('after_setup_theme', 'university_features');
 
+
+
+
 // function controlling the new post type events
 function university_post_types() {
+    
+    // function that registers a new post type Campus
+    register_post_type('campus', array(
+        /*
+        //rewrite the slug from campus to campuses
+        'rewrite' => array('slug' => 'cmapuses'),
+        */
+        // adds support to edit the excerpt and custom fields. Title and editor are default but still must be included
+    'supports' => array('title', 'editor', 'excerpt'/*, 'custom-fields'*/),
+        // wordpress will enable an archive page for campusess
+        'has_archive' => true,
+        //makes the post visible to users
+        'public' => true,
+        // Makes the editing custom post type ui use the new block editor
+       'show_in_rest' => true, 
+        //controls the labels and ui of the wordpress admin
+        'labels' => array(
+            //makes the proper name show up in the wordpress admin
+            'name' => 'Campuses',
+            //Makes the adding new event page in the wordpress admin show add new event instead of add new post
+            'add_new_item' => 'Add New Campus',
+            // Changes the wording from post to event when editing events
+            'edit_item' => 'Edit Campus',
+            //Changes the wording in the wordpress admin from all posts to all events
+            'all_items' => 'All Campuses',
+            // 
+            'singular_name' => 'Campus'
+        ),
+        // gives you a choice of dashicons to show up in the wordpress admin
+        'menu_icon' => 'dashicons-location-alt'
+    ));
+    
+    
+    
     // function that registers a new post type
     register_post_type('event', array(
         /*
@@ -200,6 +231,10 @@ function university_adjust_queries($query) {
 }
 // Changes the behavior of wordpess when fetching posts
 add_action('pre_get_posts', 'university_adjust_queries');
+
+
+// targets acf to tell it we have the google map api key
+add_filter('acf/fields/google_map/api', 'universityMapKey');
 
 
 
