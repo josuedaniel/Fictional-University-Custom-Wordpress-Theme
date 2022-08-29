@@ -9,21 +9,37 @@ get_header();
         <div class="container container--narrow page-section">
             
             <div class="metabox metabox--position-up metabox--with-home-link">
-                <p><a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('program'); ?>"
-                ><i class="fa fa-home" aria-hidden="true"></i> All Programs</a> <span class="
+                <p><a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('Campus'); ?>"
+                ><i class="fa fa-home" aria-hidden="true"></i> All Campuses</a> <span class="
                 metabox__main"><?php the_title(); ?></span></p>
             </div>
             
             <div class="generic-content"><?php the_content(); ?></div>
+            <!-- grab the field map_location from acf and assign it to the variable $mapLocation -->
+            <?php $mapLocation = get_field('map_location'); ?>
+            
+            <!-- output the campus in a map -->
+            <div class="acf-map">
+        
+            <!-- give a div the class marker along with data-lat and data-long attributes  from the $mapLocation array -->
+            <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
+                <!-- Anything within the marker div will show up as a pop up when you click on the pin in the map
+                    Below we have the title which is a link to an individual campus -->
+                <h3><?php the_title(); ?></h3>
+                
+                <!-- The address will also show in the pop up when you click on a pin in the map.  -->
 
+                <?php echo $mapLocation['address']; ?>
+            </div>
+        </div>  
             <?php
 
 
-            $relatedProfessors = new WP_Query(array(
-                // Make the custom query show only 2 events per page
+            $relatedPrograms = new WP_Query(array(
+                // Make the custom query show all programs per page
                 'posts_per_page' => -1,
-                // Grab the event post type and not post or page post type
-                'post_type' => 'professor',
+                // Grab the program post type and not post or page post type
+                'post_type' => 'program',
                 // determines the order in which posts show 
                 'orderby' => 'title',
                 // determines the order 
@@ -33,7 +49,7 @@ get_header();
                     // filters the query so that it returns the meta value related_programs
                     array(
                         // grabs the meta value we want
-                        'key' =>'related_programs',
+                        'key' =>'related_campus',
                         // Makes sure the value is the same as the next requirement
                         'compare' => 'LIKE',
                         // the value we are comparing the meta key with
@@ -42,22 +58,19 @@ get_header();
                 )
             ));
 
-            if ($relatedProfessors->have_posts()) {
+            if ($relatedPrograms->have_posts()) {
                 echo '<hr class="section-break">';
                 //
-                echo '<h2 class="headline headline--medium">'. get_the_title().' Professors</h2>';
+                echo '<h2 class="headline headline--medium">Programs Available At This Campus</h2>';
                 
-                // Start the unordered list showing off professor cards
-                echo '<ul class="professor-cards">';
-                // show the post output from the variable $relatedProfessors 
-                while ($relatedProfessors->have_posts()) {
-                    $relatedProfessors->the_post(); ?>
+                // Start the unordered list showing off programs
+                echo '<ul class="min-list link-list">';
+                // show the post output from the variable $relatedPrograms 
+                while ($relatedPrograms->have_posts()) {
+                    $relatedPrograms->the_post(); ?>
                         <!-- Give each list item a class -->
-                        <li class="professor-card__list-item">
-                            <a href="<?php the_permalink(); ?>" class="professor-card">
-                                <img src="<?php the_post_thumbnail_url('professorLandscape') ?>" alt="" class="professor-card__image">
-                                <span class="professor-card__name"><?php the_title(); ?></span>
-                            </a>
+                        <li>
+                            <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                         </li>
                                         
                 <?php }
@@ -114,26 +127,6 @@ get_header();
                             $homepageEvents->the_post(); 
                             get_template_part('template-parts/content-event');    
                         }
-                    }
-
-                    // reset the database so it doesn't give us previously used data
-                    wp_reset_postdata();
-                    
-                    //grab the info from the acf field related_campus and store it in the variable $relatedCampus
-                    $relatedCampuses = get_field('related_campus');
-
-                    if ($relatedCampuses) {
-
-                        echo '<hr class="section-break">';
-
-                        echo '<h2 class="headline headline--medium">'. get_the_title() . ' is Available At These Campuses:</h2>';
-
-                        echo '<ul class="min-list link-list">';
-                        foreach($relatedCampuses as $campus) {
-                            ?> <li><a href="<?php echo get_the_permalink($campus); ?>"><?php echo get_the_title($campus) ?></li>  <?php
-                        }
-
-                        echo '</ul>';
                     }
                 ?>
         </div>

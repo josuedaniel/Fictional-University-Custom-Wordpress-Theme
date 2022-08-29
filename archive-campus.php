@@ -21,12 +21,16 @@ pageBanner(array(
             
             ?>
             <!-- give a div the class marker along with data-lat and data-long attributes  from the $mapLocation array -->
-            <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>"></div>
+            <div class="marker" data-lat="<?php echo $mapLocation['lat'] ?>" data-lng="<?php echo $mapLocation['lng'] ?>">
+                <!-- Anything within the marker div will show up as a pop up when you click on the pin in the map
+                    Below we have the title which is a link to an individual campus -->
+                <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                <?php 
+                // The address will also show in the pop up when you click on a pin in the map. 
+                echo $mapLocation['address']; ?>
+            </div>
 
-        <?php }
-        echo paginate_links();
-        
-        ?>
+        <?php } ?>
     </div>   
     
 </div>
