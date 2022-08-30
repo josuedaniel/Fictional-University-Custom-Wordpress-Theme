@@ -4083,7 +4083,9 @@ __webpack_require__.r(__webpack_exports__);
 class Search {
   // 1. describe and create / initiate our object
   constructor() {
-    // Add the classes to each event
+    // Assigns the div with the id search-overlay__results to the property this.resultsDiv
+    this.resultsDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-overlay__results"); // Add the classes to each event
+
     this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".js-search-trigger");
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
     this.searchOverlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay"); // create the property searchField and assign the div with the id search-term to it
@@ -4091,7 +4093,11 @@ class Search {
     this.searchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-term");
     this.events(); //create a property that will store information about the state of the overlay
 
-    this.isOverlayOpen = false; // declares an empty property that we will assign a value to later 
+    this.isOverlayOpen = false; //create a property to store information about the state of the spinner
+
+    this.isSpinnerVisible = false; // declares an empty property that we will assign a value to later. will be used for spinning icon
+
+    this.previousValue; // declares an empty property that we will assign a value to later 
 
     this.typingTimer;
   } // 2. events
@@ -4104,25 +4110,50 @@ class Search {
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on("keydown", this.keyPressDispatcher.bind(this)); // assigns the method typingLogic to searchField when a key is pressed
 
-    this.searchField.on("keydown", this.typingLogic.bind(this));
+    this.searchField.on("keyup", this.typingLogic.bind(this));
   } // 3. methods (functions, action...)
   //method to be performed on the div assigned to searchField
 
 
   typingLogic() {
-    // clear out the timer from below so that this.typingTimer does not reach 2 seconds and execute the anonymous function
-    clearTimeout(this.typingTimer); //sets a timeout with an anonymous function that will execute 2 seconds after the last keypress
+    // if the value has changed. (the value won't be changed with arrow or other non typing keys)
+    if (this.searchField.val() != this.previousValue) {
+      // clear out the timer from below so that this.typingTimer does not reach 2 seconds and execute the anonymous function
+      clearTimeout(this.typingTimer); //if the searchField val is not empty
 
-    this.typingTimer = setTimeout(function () {
-      console.log("this is a time out test");
-    }, 2000);
+      if (this.searchField.val()) {
+        // If spinnerVisible is not true
+        if (!this.isSpinnerVisible) {
+          //add the div spinner-loader to this.resultsDiv
+          this.resultsDiv.html('<div class="spinner-loader"></div>'); // Sets this.isSpinnerVisible to true
+
+          this.isSpinnerVisible = true;
+        } //sets a timeout with an anonymous function that will execute 2 seconds after the last key release
+
+
+        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+      } else {
+        this.resultsDiv.html('');
+        this.isSpinnerVisible = false;
+      }
+    } //assigns the value of this.searchField to the property this.previousValue
+
+
+    this.previousValue = this.searchField.val();
+  }
+
+  getResults() {
+    this.resultsDiv.html("imagine real search results here"); // Sets this.isSpinnerVisible to false
+
+    this.isSpinnerVisible = false;
   }
 
   keyPressDispatcher(e) {
     // using e.keyCode will allow us to see the keycode for each key we press
     //console.log(e.keyCode);
-    //assign the letter S to the method openOverlay
-    if (e.keyCode == 83 && !this.isOverlayOpen) {
+    //Open the overlay with the method openOverlay as long as the letter s has been pressed, the overlay is 
+    // not already open, and there is no input or textarea already in focus
+    if (e.keyCode == 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(':focus')) {
       this.openOverlay();
     } //assign the ESC button to the method closeOverlay
 
