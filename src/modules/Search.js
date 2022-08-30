@@ -7,9 +7,13 @@ class Search {
         this.openButton = $(".js-search-trigger"); 
         this.closeButton = $(".search-overlay__close");
         this.searchOverlay = $(".search-overlay");
+        // create the property searchField and assign the div with the id search-term to it
+        this.searchField = $("#search-term");
         this.events();
         //create a property that will store information about the state of the overlay
         this.isOverlayOpen = false;
+        // declares an empty property that we will assign a value to later 
+        this.typingTimer;
     }
 
     // 2. events
@@ -19,9 +23,21 @@ class Search {
         this.closeButton.on("click", this.closeOverlay.bind(this));
         // adds keyPressDispatcher method to the keyup event
         $(document).on("keydown", this.keyPressDispatcher.bind(this));
+        // assigns the method typingLogic to searchField when a key is pressed
+        this.searchField.on("keydown", this.typingLogic.bind(this));
     }
 
     // 3. methods (functions, action...)
+     
+    //method to be performed on the div assigned to searchField
+    typingLogic() {
+        // clear out the timer from below so that this.typingTimer does not reach 2 seconds and execute the anonymous function
+        clearTimeout(this.typingTimer);
+
+        //sets a timeout with an anonymous function that will execute 2 seconds after the last keypress
+        this.typingTimer = setTimeout(function () {console.log("this is a time out test")}, 2000);
+     }
+    
     keyPressDispatcher(e) {
         // using e.keyCode will allow us to see the keycode for each key we press
         //console.log(e.keyCode);
